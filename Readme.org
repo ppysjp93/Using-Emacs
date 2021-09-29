@@ -9,9 +9,69 @@
   - installed use package
   - installed try
   - installed which-key
-* Lesson 2
+* Lesson 2 - Org
   Show some org-mode
   -review init.el
   -set up Readme.org
+* Lesson 3 - Elisp
+  (+ 22 3)
+  If you run the command M-x eval-last-sexp (evaluate last s-expression)
+  then it will retrun the value 25 in the buffer.
+  If you set a mark around the Elisp expression (C-<SPACE> will set the space)
+  then you can use the command C-x C-e which is evaluate-last-sexp
+  
+  Try it on the below: 
+
+  (setq v 100)
+  (+ v v) <- Cursor here please
+
+  (previous-line 5)
+  
+  A very useful command that is available to you when using emacs in M-x view-lossage
+  which basically lists all of the commands that you have recently entered into emacs
+  you could build quite a complex macro as a command using this I imagine...
+
+* Lesson 4 - Buffers
+  Covered a load of stuff about buffers but I already new 
+  a lot of the stuff that was covered by this! 
+
+* Lesson 5 - Windows
+
+  We learned a couple of new really useful commands for setting
+  up a series of windows. 
+
+  C-x 1 -> Runs the command delete-other-windows
+  C-x 2 -> Performs a horizontal split
+  C-x 3 -> Performs a vertical split
+  You can use (winner-mode 1) which allows you to undo and 
+  redo your window configurations, it creates a stack basically.
+  
+  C-c <LEFT> -> undoes the window configuration
+  C-c <RIGHT> -> redoes the window configuration
+  
+  Another great thing is ace-window which extends the functionality
+  of C-x o so that when you have 3 or more windows you can directly 
+  select which one you want ot be in without having to cycle through 
+  all the different options.
+  
+* Lesson 6 - Search...
+  
+  Since you normally know where you want to go you should you
+  C-s to search for where you want to go, it is much faster than 
+  using the standard motion keys that you were taught to use in the 
+  tutorial.
+* Lesson 7 - Navigation with AVY
+
+  Avy like it searches on the screen rather than in the document
+  so it gives you a short cut to getting to places directly on
+  your screen without having to memorize a load of key-bindings
+  like you would have to using Vim. It is a Genius idea.
+* Lesson 8 - Auto-complete
+  
+  Just really helps to automatically give you word 
+  suggestions from the set of words that are in you current buffer
 
 
+* Lesson 9 - Themes
+  
+  Skipped this lesson because you already have Gruvbox! 
