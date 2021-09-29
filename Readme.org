@@ -75,3 +75,27 @@
 * Lesson 9 - Themes
   
   Skipped this lesson because you already have Gruvbox! 
+
+* Lesson 10 - org init file
+  
+  You can create code blocks by typing the following
+
+  #+BEGIN_SRC emacs-lisp
+    (+
+     4
+     5
+     3)
+  #+END_SRC
+
+  If you the type C-c C-c it will then ask you if you want to
+  evaluate the block.
+
+  You can also edit the code block carefully using C-'
+  so that it formats in the way that you want it to. 
+
+  He also shows how you can run file from another file by using the following 
+  command: 
+
+  (org-babel-load-file (expand-file-name "myinit.org"))
+
+* Lesson Rob
