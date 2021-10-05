@@ -1,165 +1,165 @@
-* LINKS
- -[[HTTP://CESTLAZ.GITHUB.IO][HERE'S HIS BLOG]]
-* LESSON 1 
-** PART 1
-  INTRODUCING THE SERIES AND SETTING UP THE PACKAGE MANAGER
-  - SHOW MELPA
-  - SET UP MELPA
-** PART 2
-  - INSTALLED USE PACKAGE
-  - INSTALLED TRY
-  - INSTALLED WHICH-KEY
-* LESSON 2 - ORG
-  SHOW SOME ORG-MODE
-  -REVIEW INIT.EL
-  -SET UP README.ORG
-* LESSON 3 - ELISP
+* links
+ -[[http://cestlaz.github.io][here's his blog]]
+* lesson 1 
+** part 1
+  introducing the series and setting up the package manager
+  - show melpa
+  - set up melpa
+** part 2
+  - installed use package
+  - installed try
+  - installed which-key
+* lesson 2 - org
+  show some org-mode
+  -review init.el
+  -set up readme.org
+* lesson 3 - elisp
   (+ 22 3)
-  IF YOU RUN THE COMMAND M-X EVAL-LAST-SEXP (EVALUATE LAST S-EXPRESSION)
-  THEN IT WILL RETRUN THE VALUE 25 IN THE BUFFER.
-  IF YOU SET A MARK AROUND THE ELISP EXPRESSION (C-<SPACE> WILL SET THE SPACE)
-  THEN YOU CAN USE THE COMMAND C-X C-E WHICH IS EVALUATE-LAST-SEXP
+  if you run the command m-x eval-last-sexp (evaluate last s-expression)
+  then it will retrun the value 25 in the buffer.
+  if you set a mark around the elisp expression (c-<space> will set the space)
+  then you can use the command c-x c-e which is evaluate-last-sexp
   
-  TRY IT ON THE BELOW: 
+  try it on the below: 
 
-  (SETQ V 100)
-  (+ V V) <- CURSOR HERE PLEASE
+  (setq v 100)
+  (+ v v) <- cursor here please
 
-  (PREVIOUS-LINE 5)
+  (previous-line 5)
   
-  A VERY USEFUL COMMAND THAT IS AVAILABLE TO YOU WHEN USING EMACS IN M-X VIEW-LOSSAGE
-  WHICH BASICALLY LISTS ALL OF THE COMMANDS THAT YOU HAVE RECENTLY ENTERED INTO EMACS
-  YOU COULD BUILD QUITE A COMPLEX MACRO AS A COMMAND USING THIS I IMAGINE...
+  a very useful command that is available to you when using emacs in m-x view-lossage
+  which basically lists all of the commands that you have recently entered into emacs
+  you could build quite a complex macro as a command using this i imagine...
 
-* LESSON 4 - BUFFERS
-  COVERED A LOAD OF STUFF ABOUT BUFFERS BUT I ALREADY NEW 
-  A LOT OF THE STUFF THAT WAS COVERED BY THIS! 
+* lesson 4 - buffers
+  covered a load of stuff about buffers but i already new 
+  a lot of the stuff that was covered by this! 
 
-* LESSON 5 - WINDOWS
+* lesson 5 - windows
 
-  WE LEARNED A COUPLE OF NEW REALLY USEFUL COMMANDS FOR SETTING
-  UP A SERIES OF WINDOWS. 
+  we learned a couple of new really useful commands for setting
+  up a series of windows. 
 
-  C-X 1 -> RUNS THE COMMAND DELETE-OTHER-WINDOWS
-  C-X 2 -> PERFORMS A HORIZONTAL SPLIT
-  C-X 3 -> PERFORMS A VERTICAL SPLIT
-  YOU CAN USE (WINNER-MODE 1) WHICH ALLOWS YOU TO UNDO AND 
-  REDO YOUR WINDOW CONFIGURATIONS, IT CREATES A STACK BASICALLY.
+  c-x 1 -> runs the command delete-other-windows
+  c-x 2 -> performs a horizontal split
+  c-x 3 -> performs a vertical split
+  you can use (winner-mode 1) which allows you to undo and 
+  redo your window configurations, it creates a stack basically.
   
-  C-C <LEFT> -> UNDOES THE WINDOW CONFIGURATION
-  C-C <RIGHT> -> REDOES THE WINDOW CONFIGURATION
+  c-c <left> -> undoes the window configuration
+  c-c <right> -> redoes the window configuration
   
-  ANOTHER GREAT THING IS ACE-WINDOW WHICH EXTENDS THE FUNCTIONALITY
-  OF C-X O SO THAT WHEN YOU HAVE 3 OR MORE WINDOWS YOU CAN DIRECTLY 
-  SELECT WHICH ONE YOU WANT OT BE IN WITHOUT HAVING TO CYCLE THROUGH 
-  ALL THE DIFFERENT OPTIONS.
+  another great thing is ace-window which extends the functionality
+  of c-x o so that when you have 3 or more windows you can directly 
+  select which one you want ot be in without having to cycle through 
+  all the different options.
   
-* LESSON 6 - SEARCH...
+* lesson 6 - search...
   
-  SINCE YOU NORMALLY KNOW WHERE YOU WANT TO GO YOU SHOULD YOU
-  C-S TO SEARCH FOR WHERE YOU WANT TO GO, IT IS MUCH FASTER THAN 
-  USING THE STANDARD MOTION KEYS THAT YOU WERE TAUGHT TO USE IN THE 
-  TUTORIAL.
-* LESSON 7 - NAVIGATION WITH AVY
+  since you normally know where you want to go you should you
+  c-s to search for where you want to go, it is much faster than 
+  using the standard motion keys that you were taught to use in the 
+  tutorial.
+* lesson 7 - navigation with avy
 
-  AVY LIKE IT SEARCHES ON THE SCREEN RATHER THAN IN THE DOCUMENT
-  SO IT GIVES YOU A SHORT CUT TO GETTING TO PLACES DIRECTLY ON
-  YOUR SCREEN WITHOUT HAVING TO MEMORIZE A LOAD OF KEY-BINDINGS
-  LIKE YOU WOULD HAVE TO USING VIM. IT IS A GENIUS IDEA.
-* LESSON 8 - AUTO-COMPLETE
+  avy like it searches on the screen rather than in the document
+  so it gives you a short cut to getting to places directly on
+  your screen without having to memorize a load of key-bindings
+  like you would have to using vim. it is a genius idea.
+* lesson 8 - auto-complete
   
-  JUST REALLY HELPS TO AUTOMATICALLY GIVE YOU WORD 
-  SUGGESTIONS FROM THE SET OF WORDS THAT ARE IN YOU CURRENT BUFFER
+  just really helps to automatically give you word 
+  suggestions from the set of words that are in you current buffer
 
-* LESSON 9 - THEMES
+* lesson 9 - themes
   
-  SKIPPED THIS LESSON BECAUSE YOU ALREADY HAVE GRUVBOX! 
+  skipped this lesson because you already have gruvbox! 
 
-* LESSON 10 - ORG INIT FILE
+* lesson 10 - org init file
   
-  YOU CAN CREATE CODE BLOCKS BY TYPING THE FOLLOWING
+  you can create code blocks by typing the following
 
-  #+BEGIN_SRC EMACS-LISP
+  #+begin_src emacs-lisp
     (+
      4
      5
      3)
-  #+END_SRC
+  #+end_src
 
-  #+RESULTS:
+  #+results:
   : 12
  
-  IF YOU THE TYPE C-C C-C IT WILL THEN ASK YOU IF YOU WANT TO
-  EVALUATE THE BLOCK.
+  if you the type c-c c-c it will then ask you if you want to
+  evaluate the block.
 
-  YOU CAN ALSO EDIT THE CODE BLOCK CAREFULLY USING C-'
-  SO THAT IT FORMATS IN THE WAY THAT YOU WANT IT TO. 
+  you can also edit the code block carefully using c-'
+  so that it formats in the way that you want it to. 
 
-  HE ALSO SHOWS HOW YOU CAN RUN FILE FROM ANOTHER FILE BY USING THE FOLLOWING 
-  COMMAND: 
+  he also shows how you can run file from another file by using the following 
+  command: 
 
-  (ORG-BABEL-LOAD-FILE (EXPAND-FILE-NAME "MYINIT.ORG"))
+  (org-babel-load-file (expand-file-name "myinit.org"))
 
-* LESSON 11 - REVEAL.JS
+* lesson 11 - reveal.js
   
-  THIS WAS A BIT TRICKY TO SET UP BUT ONCE YOU USE THE WEBITE
-  AND HIS VIDEO MANAGED TO GET A NICE PRESENTAION WORKING FOR 
-  MY SELF WHICH WAS VERY SATISFYING
+  this was a bit tricky to set up but once you use the webite
+  and his video managed to get a nice presentaion working for 
+  my self which was very satisfying
 
-* LESSON 12 - FLYCHECK AND JEDI
+* lesson 12 - flycheck and jedi
   
-  THESE ARE TOOLS TO MAKE SURE THE PYTHON FILES ETC THAT YOU DECIDE
-  TO WRITE BASICALLY DO WHAT YOU WANT THE TO DO. 
-  I NEEDED TO INSTALL PYLINT USING APT-GET AND THEN ALSO ADDED 
-  FLYCHECK TO MY MYINIT.ORG.
+  these are tools to make sure the python files etc that you decide
+  to write basically do what you want the to do. 
+  i needed to install pylint using apt-get and then also added 
+  flycheck to my myinit.org.
   
-  MY CURRENT CONFIGURATION AT THIS STAGE IS TO HAVE AN 
-  THE FOLLOWING OPENED: 
+  my current configuration at this stage is to have an 
+  the following opened: 
   
-  - README.ORG
-  - TEST.PY
-  - MYINIT.ORG
-  - ESHELL
-* LESSON 14 - THOUGHTS ON EMACS
+  - readme.org
+  - test.py
+  - myinit.org
+  - eshell
+* lesson 14 - thoughts on emacs
   
-  SO ONE OF THE INTERESTING THINGS WE ARE SHOWN IS THAT WE CAN
-  SET UP A TIMER WHICH ALLOWS US TO PUT A TIMER INTO THE WORK WE 
-  ARE DOING. 
+  so one of the interesting things we are shown is that we can
+  set up a timer which allows us to put a timer into the work we 
+  are doing. 
   
-  C-C C-X 0 -> STARTS THE TIMER
-  C-C C-X , -> RECORDS A TIME, AFTER THE TIMER 
+  c-c c-x 0 -> starts the timer
+  c-c c-x , -> records a time, after the timer 
 
-  THIS IS A USEFUL FEATURE FOR WHEN WATCHING A VIDEO PERHAPS 
-  OR WHEN TAKING NOTES AND YOU WANT A TIMER ETC.
+  this is a useful feature for when watching a video perhaps 
+  or when taking notes and you want a timer etc.
 
-* LESSON 15 - MACROS
+* lesson 15 - macros
 
-  WE MADE IT, WE'VE FOUND THE MACROS VIDEOS WHICH IS WHERE WE GET 
-  TO THE GOOD STUFF! 
+  we made it, we've found the macros videos which is where we get 
+  to the good stuff! 
 
-  YOU CAN START A MACRO WITH THE <F3> KEY
-  AND THEN ONCE IT IS DEFINED YOU CAN HIT <F4> TO GET IT TO REPEAT.
-  THE MACROS IS SERIOUSLY POWERFULL BECAUSE IT CAN BE RECORDED 
-  FOR ANY EMACS OPERATION.
+  you can start a macro with the <f3> key
+  and then once it is defined you can hit <f4> to get it to repeat.
+  the macros is seriously powerfull because it can be recorded 
+  for any emacs operation.
   
-  IF YOU WANT TO STORE AWAY MACROS BY NAMING THEM WITH THE FOLLOWING
-  COMMAND: 
+  if you want to store away macros by naming them with the following
+  command: 
   
-  <M-X> NAME-LAST-KBD-MACRO: NAME
+  <m-x> name-last-kbd-macro: name
   
-  YOU CAN SEARCH FOR YOUR NAMED MACROS USING <M-X> - "NAME"
+  you can search for your named macros using <m-x> - "name"
 
-  YOU CAN THEN RETRIEVE THE STORED MACRO WITH THE FOLLOWING 
-  COMMAND: 
+  you can then retrieve the stored macro with the following 
+  command: 
 
-  <M-X> INSERT-KBD-MACRO
+  <m-x> insert-kbd-macro
   
-* LESSON 16 - UNDO TREE
-  This is just such a great application within emacs, 
+* lesson 16 - undo tree
+  this is just such a great application within emacs, 
   it is truly unbelievable! 
   
-  C-/ -> undo
-  C-<shift>-/ -> redo
-  C-x u -> Shows the undo tree
+  c-/ -> undo
+  c-<shift>-/ -> redo
+  c-x u -> shows the undo tree
   
-  You can then span it using the normal emacs command C-n and C-p for example
+  you can then span it using the normal emacs command c-n and c-p for example

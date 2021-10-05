@@ -102,20 +102,6 @@
 
 #+END_SRC
 
-* Reveal.js
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ox-reveal
-  :ensure ox-reveal)
-
-  (setq org-reveal-root
-	"file:///home/user/.emacs.d/samples/reveal/reveal.js")
-  (setq Org-Reveal-title-slide nil)
-  (setq org-reveal-mathjax t)
-#+END_SRC
-
-#+RESULTS:
-: t
 * htmlize
   #+BEGIN_SRC emacs-lisp
     (use-package htmlize
@@ -177,3 +163,32 @@
       ((racket-mode . paredit-mode)
        (racket-repl-mode . paredit-mode)))
   #+END_SRC
+* Magit
+  #+BEGIN_SRC emacs-lisp
+  ; need to put some code here at some point
+  #+END_SRC
+* Misc package
+  #+BEGIN_SRC emacs-lisp
+    (global-hl-line-mode t)
+
+    (use-package beacon
+      :ensure t
+      :config
+      ; (setq beacon-color "#666600")
+      (beacon-mode 1))
+
+    (use-package hungry-delete
+      :ensure t
+      :config
+      (global-hungry-delete-mode))
+
+    (use-package expand-region
+      :ensure t
+      :config
+       (global-set-key (kbd "C-=") 'er/expand-region))
+     #+END_SRC
+
+  #+RESULTS:
+  : t
+
+  #+RESULTS

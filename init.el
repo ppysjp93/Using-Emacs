@@ -20,7 +20,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (elpy jedi flycheck htmlize ox-reveal magit which-key use-package undo-tree try org-bullets gruvbox-theme counsel auto-complete ace-window))))
+    (vdiff-magit expand-region beacon aggresive-indent hungry-delete elpy jedi flycheck htmlize ox-reveal magit which-key use-package undo-tree try org-bullets gruvbox-theme counsel auto-complete ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
