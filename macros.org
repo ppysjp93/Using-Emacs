@@ -1,0 +1,87 @@
+#+STARTIP: overview
+* General Macros
+** go_to_messages
+   #+BEGIN_SRC emacs-lisp
+   (fset 'go-to-messages
+    [?\C-x ?b ?* ?M ?e ?s ?s ?a ?g ?e ?s ?* return ?\M->])
+   #+END_SRC
+
+  #+RESULTS:
+  : [24 98 42 77 101 115 115 97 103 101 115 42 return 134217790]
+
+* Racket Macros
+** racket-define-function  
+   #+BEGIN_SRC emacs-lisp
+   (fset 'racket-define-function
+   [?\( ?d ?e ?f ?i ?n ?e ?  ?\( ?f ?  ?x ?\) ?\S-  ?\( ?+ ?\S-  ?x ?  ?x ?\C-a ?\M-w ?\M-f ?\M-f ?\C-b])
+    (global-set-key (kbd "<f9> f") 'define-function)
+   #+END_SRC
+
+    #+RESULTS:
+    : define-function
+
+* Elisp Macros...
+** elisp-define-function
+  #+BEGIN_SRC emacs-lisp
+    (fset 'elisp-define-function
+    [?\( ?d ?e ?f ?u ?n ?  ?f ?u ?n ?c ?t ?i ?o ?n ?- ?n ?a ?m ?e ?  ?\( ?a ?r ?g ?u ?m ?e ?n ?t ?s ?. ?. ?. ?\) return ?\" ?O ?p ?t ?i ?o ?n ?a ?l ?  ?D ?c ?u ?m ?n ?e backspace backspace ?e ?n backspace backspace backspace backspace backspace ?o ?c ?u ?m ?e ?n ?t ?a ?t ?i ?o ?n ?s ?\C-f return ?\( ?i ?n ?t ?e ?r ?a ?c ?t ?i ?v ?e ?  ?a ?r ?g ?u ?m ?e ?n ?t ?- ?p ?a ?s ?s ?i ?n ?g ?- ?i ?n ?f ?o ?\) ?\S-  ?\; ?o ?p ?t ?i ?o ?n ?a ?l return ?b ?o ?d ?y ?. ?. ?. ?\)])
+    (global-set-key (kbd "C-c e d") #'elisp-define-function)
+  #+END_SRC
+
+  #+RESULTS:
+  : elisp-define-function
+** elisp-let
+   #+BEGIN_SRC emacs-lisp
+     (fset 'elisp-let
+	  [?\( ?l ?e ?t ?  ?\( ?\( ?v ?a ?r ?i ?a ?b ?l ?e ?  ?v ?a ?l ?u ?e ?0 backspace ?\) ?\( backspace return ?\( ?v ?a ?r ?i ?a ?b ?l ?e ?  ?v ?l ?a ?u ?e backspace backspace backspace backspace ?a ?l ?u ?e ?\) ?\) return ?b ?o ?d ?y ?\)])
+     (global-set-key (kbd "C-c e l") #'elisp-let)
+   #+END_SRC
+
+   #+RESULTS:
+   : elisp-let
+
+** elisp-if
+
+   #+BEGIN_SRC emacs-lisp
+     (fset 'elisp-if
+     [?\( ?i ?f ?  ?s ?t ?a ?t ?e ?m ?e ?n ?t return ?t ?r ?u ?e return ?f ?a ?l ?s ?e ?\)])
+     (global-set-key (kbd "C-c e i") #'elisp-if)
+   #+END_SRC
+
+   #+RESULTS:
+   : elisp-if
+
+** save-excursion
+   #+BEGIN_SRC emacs-lisp
+     (fset 'elisp-save-excursion
+	[?\( ?s ?a ?v ?e ?- ?e ?x ?c ?u ?r ?s ?i ?o ?n return ?b ?o ?d ?y ?. ?. ?.  ?\)])
+     (global-set-key (kbd "C-c e s") #'elisp-save-excursion)
+   #+END_SRC
+
+   #+RESULTS:
+   : elisp-save-excursion
+
+** message
+
+   #+BEGIN_SRC emacs-lisp
+     (fset 'elisp-message
+	"(message \"Hello %s\" world)")
+
+     (global-set-key (kbd "C-c e m") #'elisp-message)
+   #+END_SRC
+
+   #+RESULTS:
+   : elisp-message
+
+* Org-Macros
+** org-begin-emacs-lisp
+  #+BEGIN_SRC emacs-lisp
+  (fset 'org-begin-emacs-lisp
+   [?< ?s tab ?e ?m ?a ?c ?s ?- ?l ?i ?s ?p ?\C-n])
+  
+   (global-set-key (kbd "C-c o b") #'org-begin-emacs-lisp)
+  #+END_SRC
+
+  #+RESULTS:
+  : org-begin-emacs-lisp
+

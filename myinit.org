@@ -1,12 +1,31 @@
 #+STARTIP: overview
 * interface tweaks
-#+BEGIN_SRC emacs-lisp
-(setq inhibit-startup-message t)
-(tool-bar-mode -1) 
-(fset 'yes-or-no-p 'y-or-n-p)
-(global-set-key (kbd "<f5>") 'revert-buffer)
-#+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq inhibit-startup-message t)
+    (tool-bar-mode -1) 
+    (fset 'yes-or-no-p 'y-or-n-p)
+    (global-set-key (kbd "<f5>") 'revert-buffer)
+  #+END_SRC
 
+  #+RESULTS:
+  : revert-buffer
+
+
+** Use-Full Functions
+   Run this key command on org files that you want to have an undo tree for when you start a session.
+
+   #+BEGIN_SRC emacs-lisp
+     (defun make-temp-buffer (buf)
+       (interactive "B")
+       (let ((confirm-nonexistent-file-or-buffer nil))
+	 (switch-to-buffer buf)
+	 (undo-tree-mode 1)))
+
+     (global-set-key (kbd "C-c b") #'make-temp-buffer)
+   #+END_SRC
+
+   #+RESULTS:
+   : make-temp-buffer
 * magit
   #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -32,7 +51,7 @@
 #+END_SRC
 
 * The Rest
-#+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
 (use-package gruvbox-theme
   :ensure t)
 
@@ -145,7 +164,7 @@
       (global-undo-tree-mode))
   #+END_SRC
 
-* Racket Mode
+* Lisp Mode
   #+BEGIN_SRC emacs-lisp
     (use-package racket-mode
       :ensure t
@@ -154,23 +173,30 @@
     (use-package rainbow-delimiters
       :ensure t
       :hook
-      ((racket-mode . rainbow-delimiters-mode)
+      ((emacs-lisp-mode . rainbow-delimiters-mode)
+       (racket-mode . rainbow-delimiters-mode)
        (racket-repl-mode . rainbow-delimiters-mode)))
 
     (use-package paredit
       :ensure t
       :hook
-      ((racket-mode . paredit-mode)
+      ((emacs-lisp-mode . paredit-mode)
+       (racket-mode . paredit-mode)
        (racket-repl-mode . paredit-mode)))
   #+END_SRC
+
+  #+RESULTS:
+  | paredit-mode | rainbow-delimiters-mode |
+
 * Magit
   #+BEGIN_SRC emacs-lisp
   ; need to put some code here at some point
   #+END_SRC
 * Misc package
+
   #+BEGIN_SRC emacs-lisp
     (global-hl-line-mode t)
-
+    
     (use-package beacon
       :ensure t
       :config
@@ -188,7 +214,13 @@
        (global-set-key (kbd "C-=") 'er/expand-region))
      #+END_SRC
 
+
+
   #+RESULTS:
   : t
 
   #+RESULTS
+
+  
+  
+

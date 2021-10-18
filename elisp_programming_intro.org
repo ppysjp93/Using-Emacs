@@ -1,0 +1,1353 @@
+# Introduction to Programming in Emacs Lisp
+* Links
+  https://www.gnu.org/software/emacs/manual/html_node/eintr/Using-set.html
+  https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html#SEC_Contents
+  https://www.gnu.org/software/emacs/manual/html_node/ert/
+
+* Preface
+** Why?
+   - Full computer language
+   - Fundamental of programming and how to teach yourself to go further.
+** On Reading this Text
+   - You will be taught self-reliance
+** Intended Audience
+   The goal is to make an apporachable hill rather than a daunting mountain.
+   You should be able to skip through a lot of the stuff in this manual.
+** History
+   First developed in the 1950s at MIT 
+   Was made for research into AI but great for writing editor commands and itegrated environments.
+** A note for novices
+   You should be able to use most of the basic keybindings involved with using emacs.
+   The C-u command passes an argument to the subsequent command. (I did NOT know this).
+** Thanks
+   He writes a thanks to a load of folks.
+
+* List Processing
+** Lisp Lists
+   An example of a list is as follows: 
+   
+   #+BEGIN_SRC emacs-lisp
+   '(rose violet daisy buttercup)
+   #+END_SRC
+
+   #+RESULTS:
+   | rose | violet | daisy | buttercup |
+
+** Run a Progam
+   A list in lisp is a program that is ready to run. The first symbol in the list is often a command to be run on 
+   the rest of the items that are in the list: 
+
+   #+BEGIN_SRC emacs-lisp
+   (+ 2 2) 
+   #+END_SRC
+
+   #+RESULTS:
+   : 4
+   
+   (Type C-c C-c to run the code block.)
+
+   You can see that the '+' symobol is ran on the arguments 2 and 2 and returns 4.
+
+** Generate an Error Message And Debug Source Block
+   
+   Error Messages should be called help messages, they are there to help you decipher where you are in a program so that you 
+   don't get lost. 
+   
+   #+BEGIN_SRC emacs-lisp :session *my-emacs*
+   (this is an unquoted list)
+   #+END_SRC
+
+   #+RESULTS:
+   : 3
+   
+   You can toggle the debugger by typing the command: M-x toggle-debug-on-error.
+  
+   Example of Debugger
+
+   Debugger entered--Lisp error: (void-function this)
+   (this is an unquoted list)
+   (progn (this is an unquoted list))
+   eval((progn (this is an unquoted list)) nil)
+   org-babel-execute:emacs-lisp("(this is an unquoted list)" ((:colname-names) (:rowname-names) (:result-params "replace") (:result-type . value) (:results . "replace") (:exports . "code") (:cache . "no") (:noweb . "no") (:hlines . "no") (:tangle . "no") (:lexical . "no") (:session . "*my-emacs*")))
+   org-babel-execute-src-block(nil ("emacs-lisp" "(this is an unquoted list)" ((:colname-names) (:rowname-names) (:result-params "replace") (:result-type . value) (:results . "replace") (:exports . "code") (:session . "*my-emacs*") (:lexical . "no") (:tangle . "no") (:hlines . "no") (:noweb . "no") (:cache . "no")) "" nil 1590 "(ref:%s)"))
+   org-ctrl-c-ctrl-c(nil)
+   funcall-interactively(org-ctrl-c-ctrl-c nil)
+   call-interactively(org-ctrl-c-ctrl-c nil nil)
+   command-execute(org-ctrl-c-ctrl-c)
+
+   You can read the debug in the *Backtrace* buffer. You read it from bottom to top. In this case the error is because there
+   is a void function called "this" which makes sense.
+
+   A function is a set of instructions that the computer is told to do.
+
+** Symbol Names and Function Definitions
+
+   It is customary to name symbols in a that identifies the part of Emas from which a function belongs.
+   So a function that deals with Texinfo starts with 'texinfo-' and functions to do with reading mail start with 
+   'rmail-' for example.
+   He also describes how a function can have several names so 'plus' and '+' could point to the same set of instructions.
+
+** Lisp Interpreter
+
+   How the interpreter works:
+   - If there is a quote before the list then return the list
+   - If there is no quote, look up the function definition associated with the first element in the list
+   - If the definition exists, apply the function defintion to the arguments.
+
+**** Complications
+   
+   The lisp interpreter can also interpret variables, which is an unquoted symbol without parentheses, and will return the value
+   which is associated with it. 
+   Special forms are functions that don't work in the usual manner, and have special jobs. An example of one of these is for 
+   defining a function.
+   There are also macros. It translates a Lisp expression into another expression that is to be evaluated in place
+   of the original expression. (This is quite confusing in meaning.)
+
+   Most of the time the interpreter works from left to right which is the man thing, it's trying to express. 
+
+**** Byte Compiling
+
+   The lisp intrepeter is able to interpret code that is humanly readable and byte compile code. Byte Compiled code is much 
+   faster for the interpreter to read.
+
+   You can convert a file to byte-compiled using the command byte-compile-file.
+
+** Evaluation   
+**** How the Interpreter Acts
+      Returns values produced by carrying out the instructions given by the computer. 
+      It may do something else like move a cursor or copy a file, this is called a side effect.
+**** Evaluating inner lists
+
+     #+BEGIN_SRC emacs-lisp
+       (+ 2 (+ 3 3))
+     #+END_SRC
+
+     #+RESULTS:
+     : 8
+     
+     When lists are nested the most inner expression is evaluated first and then it goes out.
+     
+** Variables
+
+     A symbol can have a value attached to it as well as a function. A symbol that has a value is called a variable.
+     fill-column is an example of a variable.
+     #+BEGIN_SRC emacs-lisp
+       fill-column
+     #+END_SRC
+
+     #+RESULTS:
+     : 70
+     
+     It has a value of 70 in this buffer.
+     
+**** Void Function
+      Surrounding the variable fill-column with parentheses causes an issue because it causes the interpreter to search for a
+      function rather than a variable. 
+      
+      #+BEGIN_SRC emacs-lisp
+      (fill-column)
+      #+END_SRC
+      
+      fill-column is not defined as a function hence the void-function error.
+
+**** Void Variable
+     
+      If you attempt to evaluate a symbol that doesn't have a value assigned to it you will receive a a void variable 
+      error message. You can get this error by performing C-x C-e when the cursor is between the '+' and the '2' for example.
+     
+      #+BEGIN_SRC emacs-lisp
+      (+ 2 2)
+      #+END_SRC
+
+      #+RESULTS:
+      : 4
+
+** Argument...
+     Passing information to a function
+
+     #+BEGIN_SRC emacs-lisp
+       (+ 2 2)
+     #+END_SRC
+     
+     The arguments that are passed the function '+' are the two numbers. In mathematics information that is presented to 
+     a function are called the arguments. Some functions have no arguments.
+** Setting the Value of a Variable
+     There are several ways of giving a variable a value. 
+     - The function 'set'
+     - The special form 'setq'
+     - There is also 'let' which we wont get into now
+
+**** Using set
+     
+     #+BEGIN_SRC emacs-lisp
+     (set 'flowers '(rose violet daisy buttercup))
+     #+END_SRC
+
+     #+RESULTS:
+     | rose | violet | daisy | buttercup |
+     
+     So what happens here is two things: a value is returned and a symbol is bound to a list.
+     - The list ' (rose violet daisy buttercup) is returned.
+     - The symbol flowers is bound to the list.
+     
+     #+BEGIN_SRC emacs-lisp
+     flowers
+     #+END_SRC
+
+     #+RESULTS:
+     | rose | violet | daisy | buttercup |
+
+     We can now evaluate the symbol flowers and it returns the list.
+
+**** Using setq
+     
+     setq is a special form of set so taht you don't have to quote the variable that you are trying to use. 
+
+     #+BEGIN_SRC emacs-lisp
+       (setq carnivores '(lion tiger leopard))
+       
+       carnivores
+     #+END_SRC
+
+     #+RESULTS:
+     | lion | tiger | leopard |
+
+     setq and also be used to assign multiple variables. The way that it works is that the odd elements are the variables 
+     and the even elements are the object being assigned. So in the example below 'trees' and 'herbivores' are the variables 
+     and the lists are the objects that are being assigned to those variables. 
+
+     #+BEGIN_SRC emacs-lisp
+       (setq trees '(pine fir oak maple)
+	     herbivores '(gazelle antelope zebra))
+     #+END_SRC
+
+     #+RESULTS:
+     | gazelle | antelope | zebra |
+
+     It's interesting that the result is the last object which is assigned. 
+     You can also think that setq makes a symbol point to the list and is a common way of thinking of things.
+
+**** Counting
+
+     Here we can see how a variable can be reassigned over and over again if we wish
+     
+     #+BEGIN_SRC emacs-lisp
+       (setq counter 0)                  ; Let's call this the intializer
+       (setq counter (+ counter 1))      ; This is the incrementer.
+       counter                           ; This is the counter. 
+     #+END_SRC
+
+     #+RESULTS:
+     : 1
+** Summary
+    
+    Learning Lisp is like climbing a hill which the first is the steepest. You have now climbed the most difficult part; what remains
+    becomes easier as you progress onwards.
+    
+    - Lisp programs are made up of expressions, which are lists or single atoms.
+    - Lists are made up of zro or more atoms or inneres lists, separated by whitespace and surrounded by parentheses. A list can 
+       also be empty.
+    - Atoms are multi-character symbols, like forward-paragraph, single character symbols like +, strings of characters between double
+       quotation marks, or numbers.
+    - A number evaluates to itself.
+    - A string beween double quotes also evaluates to itself.
+    - When you evaluate a symbol by itself its value is returned.
+    - When you evaluate a list, the lisp interpreter looks at the first symbol in the list and the at the function definiton bound to that
+      symbol. Then the instructions in the function definition are carried out.
+    - A single-quote ' tells the Lisp interpreter that it should return the following expression as written, and not evaluate it as it 
+      would if the quote were not there.
+    - Arguments are the information passed to a function. The arguments to a function are computed by evaluating the rest of the elements
+      of the list of which the function is the first element.
+    - A function always returns a value when it is evaluated (unless it gets an error); in addition, it may also carry out some action
+      that is a side effect. In many cases a function's primary pupose IS to create a side effect.
+
+** Error Messaging Exercises
+    
+    1) Generate an erorr message by evaluating an appropriate symbol that is not within
+    
+       #+BEGIN_SRC emacs-lisp
+         then
+       #+END_SRC
+
+    
+    2) Generate an error message by evaluating an appropriate sybold that is between parentheses. 
+    
+       #+BEGIN_SRC emacs-lisp
+	 (then)
+       #+END_SRC
+
+
+    3) Generate an error message by evaluating an appropriate sybold that is between parentheses. 
+    
+       #+BEGIN_SRC emacs-lisp
+	 (setq counter 0) 
+	 (setq counter (+ counter 2))
+       #+END_SRC
+
+       #+RESULTS:
+       : 1
+
+* Practicing Evaluation
+
+  We're now going to take a step back evaluating some expressions which have already been written. Simple expressions whose first element
+  will be a function. Some functions associated with buffers are both simple and interesting.
+
+** How to Evaluate
+   Every editing command that you type into Emacs, and expression is evaluated. The "data" that you pass into the interpreter is code!
+   There is no distinction between the two in emacs, which has great benefits. 
+
+** Buffer Names   
+*** buffer-name
+
+   When you evaluate the function buffer-name, the name of the buffer appears in the echo area. (Remember C-x C-e does this). 
+   
+   #+BEGIN_SRC emacs-lisp
+     (buffer-name)
+    #+END_SRC
+
+   #+RESULTS:
+   : elisp_programming_intro.org
+   
+*** buffer-file-name
+ 
+   When you evaluate the function buffer-file-name, the full-path to the current file is returned.
+
+   #+BEGIN_SRC emacs-lisp
+     (buffer-file-name)
+   #+END_SRC
+
+   #+RESULTS:
+   : /home/user/.emacs.d/elisp_programming_intro.org
+
+   There is a nice description of the history of buffers in this section which is worth reading at some point.
+   Not all buffers are the same, *scratch* for example is not associated with any file.
+
+   When you evaluate the command current-buffer you get the the buffer /itself/.
+
+   #+BEGIN_SRC emacs-lisp
+     (current-buffer)
+   #+END_SRC
+
+   #+RESULTS:
+   : #<buffer #elisp_programming_intro.org#>
+
+   #+BEGIN_SRC emacs-lisp
+     (other-buffer)
+   #+END_SRC
+
+   #+RESULTS:
+   : #<buffer *scratch*>
+** Switching Buffers
+*** switch-to-buffer
+    If you combine switch-to-buffer with other-buffer, e-lisp will take you to the buffer we went to, this is the same as running C-x b RET.
+    To get this to evaluate run the command by using M-: and copying the contents of the source area into the eval section.
+
+    #+BEGIN_SRC emacs-lisp
+      (switch-to-buffer (other-buffer))
+    #+END_SRC
+
+    #+RESULTS:
+    : #<buffer *scratch*>
+     
+*** set-to-buffer
+    Later we will find out how to use the method set-buffer. The difference between switch-to-buffer and set-buffer is that the first does 
+   2 things, it switches the buffer to which Emac's atentions is directed; and it switches the buffer that is displayed in the window
+   to the new buffer. set-buffer on the other hand switches the attention of the computer porgram to a different buffer. The buffer on
+   the creen remains unchanged. You can think of switch-to-buffer being a command for humans because they have eyes and like to see what
+   is going on. Where set-buffer is a command for computers because computers don't have eyes they don't care!
+
+** Buffer Size and the Location of 
+   Here are some more interesting functions
+
+*** buffer-size 
+    Returns the count of the number of characters in the current buffer
+    
+    #+BEGIN_SRC emacs-lisp
+      (buffer-size)
+    #+END_SRC    
+
+    #+RESULTS:
+    : 13840
+
+*** point
+    Gives the position of the cursor as a count of the number of characters from the befinning of the buffer up to the point
+    
+    #+BEGIN_SRC emacs-lisp
+      (point)
+    #+END_SRC
+
+    #+RESULTS:
+    : 14035
+ 
+    There is also point-min, which is 1 unless Narrowing is in effect, and there is point-max which returns the max poisition the cursor
+    can go in the current buffer.
+
+
+** Exercise
+   
+   Find a file with which you are working a move towards the middle. Find its buffer name, file name, length and your position in the
+   file.
+* How to Write Function Definitions 
+
+  The Lisp interpreter checks to see if the first symbol is attached to a function definition when it attempts to evaluate an 
+  s-expression. We are going to learn to make our own functions now.
+
+** Primitive Functions
+   
+   Elisp functions are written in C and in emacs-lisp, you won't know the difference between the two, and it doesn't matter because
+   when you build up your functions they will be written in elisp.
+
+** defun
+    
+    A function definiton has 5 parts including the word 'defun' shown below:
+
+    #+BEGIN_SRC emacs-lisp
+      (defun function-name (arguments...)
+	"Optional Documentations"
+	(interactive argument-passing-info) ;optional
+	body...')
+    #+END_SRC
+
+    1) name of the symbol to which the function definition should be attached.
+    2) list of arguments, if there are no arguments then an empty list.
+    3) Optional Documentation
+    4) An option to make the function interactive so that it can be used by typing M-x and then the name of the function
+    5) The code that instructs the computer what to do: the body of the function definition.
+
+*** EXAMPLE
+
+     #+BEGIN_SRC emacs-lisp
+       (defun multiply-by-seven (number)
+	 "Multiply NUMBER by seven."
+	 (* 7 number))
+       
+       (multiply-by-seven 3)
+     #+END_SRC
+
+     #+RESULTS:
+     : 21
+
+     If you type C-h f and then the name of the function the Documentation is what you will see!
+
+     Pretty cool! 
+
+** Install
+    
+    By using a function you have installed it into emacs. Straight up. 
+
+*** Effect of installation
+     
+     You can now view the documentation and use it for evaluation.
+
+*** Change a Function Definition 
+
+     If you want to change a function, rewrite it and then evaluate it.
+** Interactive
+   
+   You make a function interactive by placing the special form interactive immediate after the documentation.
+   When an interactive function is executed, its value is not automatically printed in the echo area. You often call an interactive 
+   function for its side effects and not for the value it returns.
+
+*** Interactive multiply-by-seven
+    
+    #+BEGIN_SRC emacs-lisp
+      (defun multiply-by-seven (number)
+	"Multiply NUMBER by seven."
+	(interactive "p") 
+	(message "The result is %d" (* 7 number)))
+
+      (multiply-by-seven 7)
+    #+END_SRC
+
+    #+RESULTS:
+    : The result is 49
+    
+    As we have discussed earlier C-u allows you to pass in arguments to a function. If the function is bound to a key, then we 
+    we can use it in the same way would use another keymapped function like C-u 3 M-x forward-sentence or we can type whatever 
+    key a keychord function is bound to like C-u 3 M-e. 
+
+    If we call the command C-u M-: <elisp-function> the value will be printed in the current buffer, it will take the value from the 
+    echo area and place it hear.
+
+
+
+***  [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Interactive-Codes.html#Interactive-Codes][Code Characters for 'interactivie']]
+
+
+*** multiply-by-seven in detail
+    
+    #+BEGIN_SRC emacs-lisp
+      (message "The result is %d" (* 7 5))
+    #+END_SRC
+
+    #+RESULTS:
+    : The result is 35
+
+    When you call the function multiply-by-seven, the message is printed without quotes, but when you call message, the text is printed in
+    double quotes. This is because the value is returned by message is what apears in the echo area when you evaluate an expression 
+    whose first element is message; but when embedded in ia function, message prints the text as a side effect without quotes. 
+
+** Permant Installation   
+
+   There are several options listed for storing code for future use, but it's irrelevant to you because your org-mode method is better 
+   than those suggested. It's an interesting idea that if there is code that your site will use then it's considered a good idea to 
+   put it all in a file called site-init.el. I suppose I would put code in a site-init.org file that would then be interpreted...
+
+   Emacs grows via donations, so if you properly license code you think may be useful to others then share it! 
+
+** let
+   
+   let is a special for that will be needed in most of the function definitions. It is used to stop the interpreter getting confused
+   with regards to variables. It allows a function to assign a variable locally to a function. This means that two functions can have
+   variables with the same names but that the interpreter understands that the variable is local to its function.   
+
+*** let Prevents Confusion
+    
+    let creates a name for a local variable that overshadows any use of the same name outside the let expression. 
+    Symbols that are used in argument lists work in the same manner.
+    Local variables have no effect outside the let expression.
+    The technical term for this is that the default scoping is dynamic.
+    let can create more than one variable at once. 
+    Once let has created and bound the variables, it executes the code in the body of the let, and returns the value of the 
+    last expression in the body, a the value of the whole let expression. 
+
+*** The Parts of a let Expression
+
+    A let expression is a list of 3 parts. The first part is a symbol let. The second part is a list called varlist. The third part is 
+    the body.
+
+    A template for a let expression looks like the follwing: 
+    
+    (let varlist body)
+
+    #+BEGIN_SRC emacs-lisp
+      (let ((variable value)
+	    (variable value))
+	body)
+    #+END_SRC
+
+    Above is the general shape of let which we will define to a macro and below is an example.
+
+    #+BEGIN_SRC emacs-lisp
+      (let ((zebra "stripes")
+	    (tiger "fierce"))
+	(message "One kind of animal has %s and another is %s."
+		 zebra tiger))
+    #+END_SRC
+
+    #+RESULTS:
+    : One kind of animal has stripes and another is fierce.
+
+*** Uninitialized Vairables in a let Statement
+
+    If you do not bind variables in a let statement initially they will automatically be bound to nil.
+
+    #+BEGIN_SRC emacs-lisp
+      (let ((birch 3)
+	    pine
+	    fir
+	    (oak 'some))
+	(message
+	 "Here are %d variables with %s, %s, and %s value."
+	 birch pine fir oak))
+    #+END_SRC
+
+    #+RESULTS:
+    : Here are 3 variables with nil, nil, and some value.
+
+    Variables that are uninitialized stand alone like pine and fir. Those that are initialized are assigned within a list, like 
+    birch and oak.
+
+** if
+
+    Another special form is the conditional if. This form is used to instruct the comptuer to make decisions. You can write function 
+    funitons without using if, but it is used often enough, and is important enough, to be included here. It is used, for example,
+    in the code for the function beginning-of-buffer. The code behind the function can be find by performing 
+    M-x find-function <Function-Name>.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun beginning-of-buffer (&optional arg)
+	"Move point to the beginning of the buffer.
+      With numeric arg N, put point N/10 of the way from the beginning.
+      If the buffer is narrowed, this command uses the beginning of the
+      accessible part of the buffer.
+
+      Push mark at previous position, unless either a \\[universal-argument] prefix
+      is supplied, or Transient Mark mode is enabled and the mark is active."
+	(declare (interactive-only "use `(goto-char (point-min))' instead."))
+	(interactive "^P")
+	(or (consp arg)
+	    (region-active-p)
+	    (push-mark))
+	(let ((size (- (point-max) (point-min))))
+	  (goto-char (if (and arg (not (consp arg)))
+			 (+ (point-min)
+			    (if (> size 10000)
+				;; Avoid overflow for large buffer sizes!
+				(* (prefix-numeric-value arg)
+				   (/ size 10))
+			      (/ (+ 10 (* size (prefix-numeric-value arg))) 10)))
+		       (point-min))))
+	(if (and arg (not (consp arg))) (forward-line 1)))
+    #+END_SRC
+
+    There are a lot of functions here that we don't know, but we can briefly find out more by using C-h f <Function-Name> and we can 
+    also find out about the implmentation as mentioned by using M-x find-function <Function-Name>.
+
+    The general form of an if statement is as follows: 
+
+    #+BEGIN_SRC emacs-lisp
+      (if statement
+	  true
+	false)
+    #+END_SRC
+
+** Truth and Falsehood
+
+   What lisp considers to be true and false. 
+   One thing you should know is that false is just our old friend nil! Anything else, literally anything else other than nil is true.
+   The expression that tests for truth is interpreted as true if the result of evaluating it is a value that is not nil. In other words,
+   the result of the test is considered true if hte value returned is a number such as 47, a string such as "hello" or a symbol other 
+   than nil. Even a buffer is considered "true" because it isn't nil!
+
+*** An Explaination of nil
+
+    nil has two meanings in emacs-lisp
+
+    1) The first means an empty list.
+    2) it means false and is the value returned when a true-or-false-test tests false.
+
+       The computer doesn't distinguish between () and nil. 
+       Humans on the other hand do. 
+
+
+    #+BEGIN_SRC emacs-lisp
+      (if 4
+	  'true
+	'false)
+    #+END_SRC
+
+    #+RESULTS:
+    : true
+
+    #+BEGIN_SRC emacs-lisp
+      (if nil
+	  'true
+	'false)
+    #+END_SRC
+
+    #+RESULTS:
+    : false
+
+    If there is nothing else to be returned when a test returns true, the lisp interpreter will return the symbol t.
+
+    #+BEGIN_SRC emacs-lisp
+      (> 5 4)
+    #+END_SRC
+
+    #+RESULTS:
+    : t
+
+    On the other hand, if it returns false then nil will be returned.
+n
+    #+BEGIN_SRC emacs-lisp
+      (> 4 5)
+    #+END_SRC
+
+    #+RESULTS:
+
+** save-excursion
+
+   The save-excursion function is the final special form of the chapter and saves the location of point, executes the body of the function
+   and then restores point to its previous position if its location was changed. It's primary pupose is to keep the user from being 
+   suprised and disturbed by unexpected movement of point.
+
+*** Point and mark
+
+    Point is the current location of the cursor. Each buffer has its own value for point.
+    The mark is another position in the buffer; its value can be set with a command such as C-SPC (set-mark-command).
+    The command C-x C-x (exchange-point-and-mark) swaps the positon of the mark and the point.
+    If you then decide to set another mark, the previous mark is save in the mark ring.
+    You can jump the cursor to a saved mark by typing C-u C-SPC one or more times. 
+    
+    The part of the buffer between point and mark is called the region. Numerous command work on the region including 
+    
+    - center-region
+    - count-lines-region 
+    - kill-region
+    - print-region 
+
+    save-excursion allows you to have the point at a particular place in the text, for a function to be evaluated and then the point to be returned
+    to it's original position before the execution of the command. Whatever happens, even something strange, the point will be restored to it's orginal
+    place.
+
+*** Template for save excursion
+    
+    This is the standard template for a save-excursion function
+
+    #+BEGIN_SRC emacs-lisp
+      (save-excursion
+	body...)
+    #+END_SRC
+
+    There are often a series of expressions that are called with the save-exursion special form, as shown below abstractly.
+
+    #+BEGIN_SRC emacs-lisp
+      (save-excursion
+	first-expression-in-body
+	second-expression-in-body
+	third-expression-in-body
+	...
+	last-expression-in-body)
+    #+END_SRC
+
+** defun Exercises
+
+*** Exercise 1
+    #+BEGIN_SRC emacs-lisp
+      (defun non-interactive-double (number)
+	"Doubles the input but isn't interactive"
+	  (message "Double %d is %d" 
+	     number (* number 2)))
+
+      (defun interactive-double (number)
+	"Doubles the input but isn't interactive"
+	(interactive "p") 
+	(message "Double %d is %d" 
+	     number (* number 2)))
+   #+END_SRC
+
+   #+RESULTS:
+   : interactive-double
+
+    non-interactive-double can't be called using M-x, it has to be evaluated using M-: 
+   
+    interactive double can be called using M-x and arguments can be passed to it using C-u!
+
+*** Exercise 2
+    
+    The function that is written needs to TEST whether the current value of fill-column is greater than the argument passed to the function
+    and if so prints an appropriate message.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun greater-than-fill-column? (arg)
+	(defun if-true-print-yes-else-print-false (bool)
+	  (if bool
+	      "yes"
+	    "no"))
+	"An argument is passed to this function to test whether the value of fill-column is greater."
+	(interactive "p")
+	(message "Is the arg greater than fill collumn? %s"
+		 (if-true-print-yes-else-print-false 
+		   (< fill-column arg))))
+    #+END_SRC
+
+    #+RESULTS:
+    : greater-than-fill-column\?
+
+    Type C-u 80 M-x greater-than-fill-column? Should be yes!
+    
+    Type C-u 60 M-x greater-than-fill-column? Should be no!
+
+    Killed it! 
+
+* A Few Buffer-Related Functions...
+  In this section we are going to study a few functions.
+  
+** Finding More
+   
+   Some useful key mappings for finding information about functions
+
+   - C-h f <Function-Name>
+   - C-h v <Variable-Name>
+   - describe-function will tell you some information about a function, and if you hit return over the name of the file containing the function 
+     then it will take you to the function definition.
+   - C-h a <Function-Name> will take you directly to the function definition.
+   - C-h p 
+
+     [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Create-Tags-Table.html#Create-Tags-Table][Creating A Tags Table]] 
+
+     There is an aside in this section for how to create a tags table. This then gives you the power to jump to definitions of functions that you have 
+     created by using M-.
+
+     Tags are used for find code so are used in file ending in *.el, *.py, *.c and so on! 
+
+** simplified-beginning-of-buffer
+
+   #+BEGIN_SRC emacs-lisp
+     (defun simplified-beginning-of-buffer ()
+       "Move point ot the beginning of the buffer;
+     leave mark at previous position."
+       (interactive) 
+       (push-mark)
+       (goto-char (point-min)))
+   #+END_SRC
+
+   #+RESULTS:
+   : simplified-beginning-of-buffer
+
+   You can see how this function does not require any arguments.
+   push-mark is the expression that sets a mark at the current position of the cursor, wherever that may be. The psoition of this mark is 
+   saved in the mark ring.
+
+   The next line (goto-char (point-min)). This expression jumps the cursor to the minimum point in the buffer, that is, to the beginning
+   of the buffer (or to the beginning of the accessible portion of the buffer if it is narrowed.) 
+
+   The go to end-of-buffer function definition is written in the same way as the beginning-of-buffer definition except that the 
+   body of the function contains the expression (goto-char (point-max)) in place of (goto-char(point-min)).
+      
+** mark-whole-buffer
+
+   We are now going to look at a slightly more difficult example.
+
+*** mark-whole-buffer overview
+    
+    #+BEGIN_SRC emacs-lisp
+      (defun mark-whole-buffer ()
+	"Put point at beginning and mark at end of buffer.
+      If narrowing is in effect, only uses the accessible part of the buffer.
+      You probably should not use this function in Lisp programs;
+      it is usually a mistake for a Lisp function to use any subroutine
+      that uses or sets the mark."
+	(declare (interactive-only t))
+	(interactive)
+	(push-mark)
+	(push-mark (point-max) nil t)
+	;; This is really `point-min' in most cases, but if we're in the
+	;; minibuffer, this is at the end of the prompt.
+	(goto-char (point-min)))
+    #+END_SRC
+
+    To get this function definition in full:
+
+    1) C-'
+    2) Type in the name of the function
+    3) Leave cursor on top of function and type M-.
+    4) Copy definition
+       
+*** Body of mark-while-buffer
+
+    push-mark stores the current position of the mark.
+
+    This function stores marks on a ring. You can access these positions by typing C-u C-SPC twice.
+    
+    The most difficult line to comprehend in this function is (push-mark (point-max) nil t).
+    The first argument (point-max) is self-explanatory, it sets the mark at the last position in the buffer.
+    The second argument nil, tells the function that it should display  message that says "Mark Set".
+    The third argument tells push mark to activate mark when Transient Mark mode is truned on. This mode is often off.
+    
+    Finally the last line, places the point at the beginning of the buffer.
+
+    The whole buffer is the region because the point is placed at the beginning of the buffer and the mark is set at the end of the 
+    buffer.
+
+** append-to-buffer
+   
+   append-to-buffer command is a more complex command. What it does is copies the region (that is part of the buffer between point and 
+   mark) from the current buffer to a specified buffer.
+
+   The latest emacs version of the is function is actually different to the current one.
+
+   #+BEGIN_SRC emacs-lisp
+     (defun append-to-buffer (buffer start end)
+       "Append to specified buffer the text of the region.
+     It is inserted into that buffer before its point.
+
+
+     When calling from a program, give three arguments:
+     BUFFER (or buffer name), START and END.
+     START and END specify the portion of the current buffer to be copied."
+       (interactive
+	(list (read-buffer "Append to buffer: " (other-buffer
+						 (current-buffer) t))
+	      (region-beginning) (region-end)))
+
+       (let ((oldbuf (current-buffer)))
+	 (save-excursion
+	   (let* ((append-to (get-buffer-create buffer))
+		  (windows (get-buffer-window-list append-to t t))
+		  point)
+	     (set-buffer append-to)
+	     (setq point (point))
+	     (barf-if-buffer-read-only)
+	     (insert-buffer-substring oldbuf start end)
+	     (dolist (window windows)
+	       (when (= (window-point window) point)
+		 (set-window-point window (point))))))))
+   #+END_SRC
+
+   #+RESULTS:
+   : append-to-buffer
+
+   insert-buffer-substring takes a substring from a buffer, and inserts it into another buffer.
+   append-to-buffer is used mainly to get insert-buffer-substring to work.
+
+*** append-to-buffer body
+    
+    So the body of the append-to-buffer function starts with a let.
+    oldbuf, append-to and windows are all variables that are assigned by Emacs.
+    
+*** append save-excursion
+
+    save-excursion functions saves the location of point and restores it to that position after the expression in the body 
+    of the save-excrusion has completed its execution.
+
+*** let*
+
+    let* is different to let. It contains a * in its name. It enables Emacs to set each variable in its varlist in sequence,
+    one after the other. Its key feature is that variables later in the var list can make use of the value which Emacs set variables
+    earlier in the varlist.
+
+*** set-buffer
+
+    set-buffer expression has now changed to (set-buffer append-to) 
+
+    append-to-buffer function definition inserts text from the buffer in which you are currently in to a named buffer. This makes sense.
+    insert-buffer-substring does just the opposite
+
+*** How it works
+
+    The oldbuffer is saved as a variable. Emacs then gets the new buffer and has its attention switched to it. A region of text is inserted
+    from oldbuffer to new buffer and then via save-excursion, it brings you back to the original 
+
+** Exercises
+
+*** My own simplified-end-of-buffer function
+    
+
+   #+BEGIN_SRC emacs-lisp
+     (defun simplified-end-of-buffer ()
+       "Move point ot the beginning of the buffer;
+     leave mark at previous position."
+       (interactive) 
+       (push-mark)
+       (goto-char (point-max)))
+   #+END_SRC
+
+   #+RESULTS:
+   : simplified-end-of-buffer
+
+*** buffer-exists?
+
+    #+BEGIN_SRC emacs-lisp
+      (defun buffer-exists? (buffer-or-name)
+	"Tells you whether a buffer exists or not"
+	(interactive argument-passing-info) ;optional
+	(if ((get-buffer buffer-or-name)
+	    (message "Buffer does exist")
+	  (message "Buffer does not exist")))
+    #+END_SRC
+
+    #+RESULTS:
+    : buffer-exists\?
+
+*** xref-find-definitions
+
+    #+BEGIN_SRC emacs-lisp
+      (defun copy-to-buffer (buffer start end)
+	"Copy to specified buffer the text of the region.
+      It is inserted into that buffer, replacing existing text there.
+
+      When calling from a program, give three arguments:
+      BUFFER (or buffer name), START and END.
+      START and END specify the portion of the current buffer to be copied."
+	(interactive "BCopy to buffer: \nr")
+	(let ((oldbuf (current-buffer)))
+	  (with-current-buffer (get-buffer-create buffer)
+	    (barf-if-buffer-read-only)
+	    (erase-buffer)
+	    (save-excursion
+	      (insert-buffer-substring oldbuf start end)))))
+    #+END_SRC
+* A Few More Complex Functions...
+  
+  We continue our learning by looking at a couple more functions:
+
+** copy-to-buffer
+
+   Now that we know how append-to-buffer works, it is easy to understand copy-to-buffer. This function copies text into a buffer, but instead 
+   of adding to the second buffeqr, it replaces all the previous text in the second buffer.
+
+   You can see how this is done because the erase-buffer command is called which deletes everything in the buffer and then
+   the insert-buffer-substring command takes the section from the old buffer and places it in the new buffer.
+   The barf-if-buffer-read-only command signals if the buffer you are trying to write to is read only.
+   get-buffer-create does one of two things, if the buffer exists then use that buffer, otherwise create it. That buffer is then 
+   evaluated as the current buffer temporarily.
+
+   #+BEGIN_SRC emacs-lisp
+     (defun copy-to-buffer (buffer start end)
+       "Copy to specified buffer the text of the region.
+     It is inserted into that buffer, replacing existing text there.
+
+     When calling from a program, give three arguments:
+     BUFFER (or buffer name), START and END.
+     START and END specify the portion of the current buffer to be copied."
+       (interactive "BCopy to buffer: \nr")
+       (let ((oldbuf (current-buffer)))
+	 (with-current-buffer (get-buffer-create buffer)
+	   (barf-if-buffer-read-only)
+	   (erase-buffer)
+	   (save-excursion
+	     (insert-buffer-substring oldbuf start end)))))
+   #+END_SRC
+
+** insert-buffer
+
+   insert-buffer has changed over the years, so we are going to take the old version of the function:
+   
+*** insert-buffer code
+    #+BEGIN_SRC emacs-lisp
+      (defun insert-buffer (buffer)
+	"Insert after point the contents of BUFFER.
+      Puts mark after the inserted text.
+      BUFFER may be a buffer or a buffer name."
+	(interactive "*bInsert buffer: ")
+
+	(or (bufferp buffer)
+	    (setq buffer (get-buffer buffer)))
+	(let (start end newmark)
+	  (save-excursion
+	    (save-excursion
+	      (set-buffer buffer)
+	      (setq start (point-min) end (point-max)))
+	    (insert-buffer-substring buffer start end)
+	    (setq newmark (point)))
+	  (push-mark newmark)))
+    #+END_SRC
+
+*** insert-buffer interactive
+
+    insert-buffer, the interactive declaration has two parts, an aterisk '*' and bInsertbuffer:
+
+**** Read-only buffer
+
+     The asterisk is for when the buffer is read-only, a buffer that cannot be modified. The asterisk isn't separated with a new line
+     argument.
+
+**** b for interactive
+
+     The lower-case 'b' tells the Lisp interpreter that the argument should be an existing buffer. Emacs will prompt you for the name of 
+     the buffer, offering ou a default buffer, with name completion enabled. 
+     We will learn about the progn special form at a later stage.
+
+*** insert-buffer body
+
+    The body has an or expression and a let expression. The or expression is there to make sure that the argument is a buffer and not
+    just the name of a buffer. The body of the let expression contains the code which copies the other buffer into the current buffer.
+
+    One thing to note is the nested save-excursion function calls. So if we remember a save-excursion, saves the position of the point
+    then it goes to another buffer and performs an action in another buffer, once that has been executed, it returns to the original 
+    buffer, at the location of the position of the point.
+
+*** if and or
+
+    
+    
+    If we have a buffer name but not the buffer itself then we want to get our hands on the buffer itself. This is called binding.
+    The bufferp function tells us whether we have the buffer rather than its name. The or statement causes this (bufferp buffer) to be 
+    evaluated first. If that isn't the case the second statement will get evaluated and bound to buffer (setq buffer (get-buffer buffer)).
+    The fact that the function ends with the letter 'p' indicates that the function is a predicate function.
+
+*** Insert or
+
+    We know how 'or' is evaluated because you have read SICP:
+
+    (if (not (holding-on-to-guest))
+      (find-and-take-arm-of-guest))
+
+    as an or statement is this:
+
+    (or (holding-on-to-guest) (find-and-take-arm-of-guest))
+
+*** Insert let
+
+    The let expression binds 'start', 'end' and 'newmark'.
+    There are two save-excursion expressions. The innver is evaluated first so we will focus on this one first.
+
+    #+BEGIN_SRC emacs-lisp
+      (save-excursion
+	(set-buffer buffer)
+	(setq start (point-min) end (point-max)))
+    #+END_SRC
+
+    In this example we have an example of how setq is able to bind two variables in one expression:
+
+    start -> point-min
+    end -> point-max
+
+    (set-buffer buffer) changes the attention of Emacs from the current buffer to the buffer we are inserting from.
+
+    After this inner save-excursion expression is executed, the save-excursion restores the original buffer.
+    'start' and 'end' still remain set to the values as a result of evaluating setq.
+
+    #+BEGIN_SRC emacs-lisp
+      (save-excursion
+	(inner-save-excursion-expression
+	 (go-to-new-buffer-and-set-start-and-end)
+	 (insert-buffer-substring buffer start end)
+	 (setq newmark (point)))
+    #+END_SRC
+
+    It's quite clear that the insert-buffer-substring now takes the string from the other buffer (aka 'buffer') and puts it in the 
+    current buffer.
+
+    Let's review the whole expression again:
+    
+    #+BEGIN_SRC emacs-lisp
+      (let (start end newmark)
+	(save-excursion
+	  (save-excursion
+	    (set-buffer buffer)
+	    (setq start (point-min) end (point-max)))
+	  (insert-buffer-substring buffer start end)
+	  (setq newmark (point)))
+	(push-mark newmark))
+    #+END_SRC
+
+    I think the best way  to think of save-excursion is to think of it as a save-point, where afterwards we do a load of instructions
+    and then we expect the point to be exactly where we left it. 
+
+    I suppose my confusion lies in the necessity of having two save excursions. The inner save-excursion ALLOWS us to go to the other 
+    buffer and assign 'start' and 'end', I think that is the best way of thinking of it.
+
+*** New insert-buffer
+
+    Emacs has made this function more confusing since Emacs 22: 
+
+    #+BEGIN_SRC emacs-lisp
+      (defun insert-buffer (buffer)
+	"Insert after point the contents of BUFFER.
+      Puts mark after the inserted text.
+      BUFFER may be a buffer or a buffer name."
+	(declare (interactive-only insert-buffer-substring))
+	(interactive
+	 (list
+	  (progn
+	    (barf-if-buffer-read-only)
+	    (read-buffer "Insert buffer: "
+			 (if (eq (selected-window) (next-window))
+			     (other-buffer (current-buffer))
+			   (window-buffer (next-window)))
+			 t))))
+	(push-mark
+	 (save-excursion
+	   (insert-buffer-substring (get-buffer buffer))
+	   (point)))
+	nil)
+    #+END_SRC
+    
+    As you can see there is some defensive programming associated with the newer function as demonstrated by the 
+    (barf-if-buffer-read-only). We still don't know anything about the progn special form so let's not worry about that.
+    The weird thing about this new form is that the save-excursion is inside the push-mark expression.
+
+    This is example where the function is decide to produce a side effect only, which is why it returns 'nil', if you look
+    carefully at the body of the function. The side effect is what we are after, weird aye.
+
+** beginning-of-buffer
+
+   beginning-of-buffer can take an input argument. The argument is a number between 1 and 10 and it decides where exactly in the 
+   buffer, the 'beginning' is. 1 = 10%, 2 = 20% and so on... 
+
+   #+BEGIN_SRC emacs-lisp
+     (defun beginning-of-buffer (&optional arg)
+       "Move point to the beginning of the buffer.
+     With numeric arg N, put point N/10 of the way from the beginning.
+     If the buffer is narrowed, this command uses the beginning of the
+     accessible part of the buffer.
+
+     Push mark at previous position, unless either a \\[universal-argument] prefix
+     is supplied, or Transient Mark mode is enabled and the mark is active."
+       (declare (interactive-only "use `(goto-char (point-min))' instead."))
+       (interactive "^P")
+       (or (consp arg)
+	   (region-active-p)
+	   (push-mark))
+       (let ((size (- (point-max) (point-min))))
+	 (goto-char (if (and arg (not (consp arg)))
+			(+ (point-min)
+			   (if (> size 10000)
+			       ;; Avoid overflow for large buffer sizes!
+			       (* (prefix-numeric-value arg)
+				  (/ size 10))
+			     (/ (+ 10 (* size (prefix-numeric-value arg))) 10)))
+		      (point-min))))
+       (if (and arg (not (consp arg))) (forward-line 1)))
+   #+END_SRC
+
+   You can see that inside the goto-char expression that the if statement controsls whether the character that the 
+   expression goes to is point-min or some adjusted value based on the optional argument.
+
+*** Optional Arguments
+
+    You have to explicitly state that an argument is optional, otherwise lisp assumes that the argument must be supplied.
+    The keyword '&optional' is this key word.
+    Here is a smaller outline of the function:
+
+    #+BEGIN_SRC emacs-lisp
+      (defun beginning-of-buffer (&optional arg)
+	"documentation…"
+	(interactive "P")
+	(or (is-the-argument-a-cons-cell arg)
+	    (and are-both-transient-mark-mode-and-mark-active-true)
+	    (push-mark))
+	(let (determine-size-and-set-it)
+	(goto-char
+	  (if-there-is-an-argument
+	      figure-out-where-to-go
+	    else-go-to
+	    (point-min))))
+    #+END_SRC
+
+    We can see the predicate notation is used on consp.
+    
+    (consp arg) -> (is-the-argument-a-cons-cell arg)
+
+    (region-active-p) -> ( are-both-transient-mark-mode-and-mark-active-true)
+
+    (determine-size-and-set-it) -> (size (- (point-max) (point-min))) 
+
+    I love the above body, because it demonstrates the wishful thinking that was involved in creating the function before going ahead
+    and making it. 
+
+    The "P" in the interactive expression tell Emacs to pass a prefix argument. M-10 is an example of a prefix argument.
+
+    Once the optional argument has been defensively programmed, the if statement in the goto-char expression is evaluated.
+    If the is not argument, this simplifies to: 
+
+    (goto-char (point-min))
+
+*** beginning-of-buffer opt arg
+    
+    The below works out what value should be passed to goto-char.
+
+    #+BEGIN_SRC emacs-lisp
+      (if (> (buffer-size) 10000)
+	  ;; Avoid overflow for large buffer sizes!
+				(* (prefix-numeric-value arg)
+				   (/ size 10))
+	(/
+	 (+ 10
+	    (*
+	     size (prefix-numeric-value arg))) 10))
+    #+END_SRC
+
+    If we think about the wishful thinking of this function we could express it as follows:
+
+    #+BEGIN_SRC emacs-lisp
+      (if (buffer-is-large
+	   divide-buffer-size-by-10-and-multiply-by-arg
+	   else-use-alternate-calculation))
+    #+END_SRC
+
+    Consider the case where size = 10100 and arg = 7:
+
+    divide-buffer-size-by-10-and-multiply-by-arg -> (* 7 (/ 10100 10)) -> 7070 which is bang on 70% of the size obviously.
+
+    Consider the case where size = 1010 and arg = 7 
+
+    else-use-alternate-calculation -> (/ (+ 10 (* 1010 7)) 10) -> 708 which is bang on 70% of 1010. (Love this btw)
+
+*** beginning-of-buffer complete
+
+    Here is the complete version of the beginning-of-buffer function once again.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun beginning-of-buffer (&optional arg)
+	"Move point to the beginning of the buffer;
+      leave mark at previous position.
+      With \\[universal-argument] prefix,
+      do not set mark at previous position.
+      With numeric arg N,
+      put point N/10 of the way from the beginning.
+
+      If the buffer is narrowed,
+      this command uses the beginning and size
+      of the accessible part of the buffer.
+
+
+      Don't use this command in Lisp programs!
+      \(goto-char (point-min)) is faster
+      and avoids clobbering the mark."
+	(interactive "P")
+	(or (consp arg)
+	    (and transient-mark-mode mark-active)
+	    (push-mark))
+
+	(let ((size (- (point-max) (point-min))))
+	  (goto-char (if (and arg (not (consp arg)))
+			 (+ (point-min)
+			    (if (> size 10000)
+				;; Avoid overflow for large buffer sizes!
+				(* (prefix-numeric-value arg)
+				   (/ size 10))
+			      (/ (+ 10 (* size (prefix-numeric-value arg)))
+				 10)))
+		       (point-min))))
+  	(if (and arg (not (consp arg))) (forward-line 1)))
+    #+END_SRC
+
+    In the documentation string, there is reference to an expression \\[universal-argument]
+    'universal-argument' is a key which is boud to a value C-u normally.
+
+    The final line of this function:
+
+     	(if (and arg (not (consp arg))) (forward-line 1)))
+
+    This is just a final flourish that makes sure the cursor is placed one cursor after the appropriate tenths position in the buffer.	
+
+*** Second Buffer Related Reviewe
+
+    In this section we have found out about:
+
+    or
+
+    and
+
+    &optional -> Keyword indicating an optional argument for a function.
+
+    prefix-numeric-value -> Convert prefix argument procuded by (interacive "P") to numeric value.
+
+    forward-line
+    
+    erase-buffer
+
+    bufferp -> return t if the argument is a buffer; otherwise 
+    
+** optional Exercise
+
+   Create a function size_relative_fill_column.
+   #+BEGIN_SRC emacs-lisp
+     (defun size_relative_fill_column (size)
+       "Tells you whether the argument supplied to this function is 
+     greater, less than or equal to the fill_column variable."
+       (interactive "P")
+       (if (= size fill-column)
+	   (message "%s is equal to fill-column" size)
+	 (if (> size fill-column)
+	     (message "%s is greater than fill-column" size)
+	   (message "%s is less than fill-columnn" size))))
+   #+END_SRC
+
+   #+RESULTS:
+   : size_relative_fill_column
+
+   
+* Narrowing And Widening
+  
+  Narrowing restricts the area of focus within a buffer. It stops you from changing parts of a buffer that you do not wish to change.
+
+** Narrowing advantages
+
+   Narrowing controls where edits take place. It can be misleading because you may look at a buffer and think that there is a load of 
+   text missing, but this shouldn't stop you from trying it out. 
+
+   C-x n n -> narrow-region
+
+   C-x n w -> widen
+
+** save-restriction
+
+   save-restriction is a special form. It keeps tract of what narrowing is in effect. 
+
+** what-line
+** narrow Exercise

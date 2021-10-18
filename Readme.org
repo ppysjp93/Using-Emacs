@@ -1,6 +1,6 @@
 * links
  -[[http://cestlaz.github.io][here's his blog]]
-* lesson 1 
+gg* lesson 1 
 ** part 1
   introducing the series and setting up the package manager
   - show melpa
